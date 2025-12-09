@@ -558,8 +558,7 @@
                 <button id="mic-btn" type="button" onclick="toggleMic()" 
                     class="bixby-logo-wrap w-14 h-14 rounded-full bg-gradient-to-br from-[#2876f9] to-[#6d42ef] flex items-center justify-center text-white shadow-lg shrink-0 transition-transform active:scale-90 z-20">
                     <div class="bixby-logo-pulse"></div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Bixby_logo_black.svg/1200px-Bixby_logo_black.svg.png" 
-                         alt="Bixby" class="w-6 h-6 invert opacity-90">
+                    <i class="fa-solid fa-microphone text-xl"></i>
                 </button>
 
                 <!-- Text Input -->
@@ -589,6 +588,85 @@
         const welcomeMsg = document.getElementById('welcome-message');
         const bottomBar = document.getElementById('bottom-bar');
         let isMicActive = false;
+        let recognition = null;
+        
+        // Web Speech API 초기화
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ko-KR'; // 한국어 설정
+            recognition.continuous = false; // 한 번만 인식
+            recognition.interimResults = false; // 중간 결과 표시 안 함
+            
+            recognition.onstart = function() {
+                console.log('음성인식 시작');
+                isMicActive = true;
+                const btnWrap = micBtn;
+                const container = micBtn.parentElement.parentElement.parentElement;
+                btnWrap.classList.add('listening');
+                container.classList.add('listening');
+                userInput.placeholder = "말씀하세요...";
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript.trim();
+                console.log('인식된 텍스트:', transcript);
+                
+                // 인식된 텍스트를 입력 필드에 먼저 표시
+                userInput.value = transcript;
+                
+                // 음성인식 종료 (UI 업데이트)
+                recognition.stop();
+                isMicActive = false;
+                const btnWrap = micBtn;
+                const container = micBtn.parentElement.parentElement.parentElement;
+                btnWrap.classList.remove('listening');
+                container.classList.remove('listening');
+                userInput.placeholder = "명령어를 입력하세요";
+                
+                // 입력 필드에 텍스트가 표시된 후 자동으로 메시지 전송
+                if (transcript) {
+                    // 약간의 지연을 주어 사용자가 인식된 텍스트를 볼 수 있게 함
+                    setTimeout(() => {
+                        sendMessage(transcript);
+                        userInput.value = ''; // 전송 후 입력 필드 비우기
+                    }, 300);
+                }
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('음성인식 오류:', event.error);
+                isMicActive = false;
+                const btnWrap = micBtn;
+                const container = micBtn.parentElement.parentElement.parentElement;
+                btnWrap.classList.remove('listening');
+                container.classList.remove('listening');
+                userInput.placeholder = "명령어를 입력하세요";
+                
+                // 오류 메시지 표시
+                let errorMsg = "음성인식에 실패했습니다.";
+                if (event.error === 'no-speech') {
+                    errorMsg = "음성이 감지되지 않았습니다. 다시 시도해주세요.";
+                } else if (event.error === 'not-allowed') {
+                    errorMsg = "마이크 권한이 필요합니다. 브라우저 설정에서 마이크 권한을 허용해주세요.";
+                }
+                
+                // 사용자에게 오류 알림 (선택적)
+                addBotCard("음성인식 오류", errorMsg, "마이크 버튼을 다시 눌러 시도해주세요.", null);
+            };
+            
+            recognition.onend = function() {
+                console.log('음성인식 종료');
+                isMicActive = false;
+                const btnWrap = micBtn;
+                const container = micBtn.parentElement.parentElement.parentElement;
+                btnWrap.classList.remove('listening');
+                container.classList.remove('listening');
+                userInput.placeholder = "명령어를 입력하세요";
+            };
+        } else {
+            console.warn('이 브라우저는 음성인식을 지원하지 않습니다.');
+        }
 
         // 하단 영역 높이에 맞춰 콘텐츠 영역 padding 조정
         function adjustContentPadding() {
@@ -795,22 +873,31 @@
         }
 
         function toggleMic() {
-            isMicActive = !isMicActive;
-            const btnWrap = micBtn;
-            const container = micBtn.parentElement.parentElement.parentElement; // .fixed bottom container
-
+            if (!recognition) {
+                addBotCard("지원되지 않음", "이 브라우저는 음성인식을 지원하지 않습니다.", "Chrome, Edge, Safari 등의 최신 브라우저를 사용해주세요.", null);
+                return;
+            }
+            
             if (isMicActive) {
-                // Listening Mode
-                btnWrap.classList.add('listening'); // trigger logo pulse
-                container.classList.add('listening'); // trigger wave bar
-                
-                userInput.placeholder = "말씀하세요...";
-            } else {
-                // Idle Mode
+                // 음성인식 중지
+                recognition.stop();
+                isMicActive = false;
+                const btnWrap = micBtn;
+                const container = micBtn.parentElement.parentElement.parentElement;
                 btnWrap.classList.remove('listening');
                 container.classList.remove('listening');
-                
                 userInput.placeholder = "명령어를 입력하세요";
+            } else {
+                // 음성인식 시작
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error('음성인식 시작 오류:', error);
+                    // 이미 실행 중인 경우 무시
+                    if (error.name !== 'InvalidStateError') {
+                        addBotCard("오류 발생", "음성인식을 시작할 수 없습니다.", "잠시 후 다시 시도해주세요.", null);
+                    }
+                }
             }
         }
     </script>

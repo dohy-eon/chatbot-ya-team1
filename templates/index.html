@@ -378,17 +378,17 @@
             
             <!-- Suggestion Chips (Pills) -->
             <div class="w-full flex justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar pb-2 px-2">
-                <button onclick="sendQuickMessage('컴소과 사무실 위치')" 
+                <button onclick="sendQuickMessage('컴퓨터공학부 사무실 위치')" 
                     class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
-                    "컴소과 사무실 위치 알려줘"
+                    "컴퓨터공학부 사무실 어디야?"
                 </button>
-                <button onclick="sendQuickMessage('조용한 카페 추천')" 
+                <button onclick="sendQuickMessage('도서관 4층 시설')" 
                     class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
-                    "조용한 카페 추천해줘"
+                    "도서관 4층에 뭐 있어?"
                 </button>
-                <button onclick="sendQuickMessage('도서관 가는 길')" 
+                <button onclick="sendQuickMessage('학생식당 위치')" 
                     class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
-                    "도서관 어떻게 가?"
+                    "학생식당 어디 있어?"
                 </button>
             </div>
 
@@ -469,38 +469,36 @@
             // 3. Add Loading Card
             const loadingId = addLoadingCard();
             
-            // --- [Backend Integration Point] ---
-            // const API_URL = "http://localhost:8000/chat"; 
+            // GPT API 호출
+            const API_URL = "/api/chat";
             
             try {
-                // Mock Delay
-                await new Promise(r => setTimeout(r, 1500)); 
-                
-                let title = "정보를 찾을 수 없어요";
-                let description = "죄송합니다. 아직 해당 질문에 대한 정보가 없습니다.";
-                let extraInfo = "";
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: text })
+                });
 
-                if (text.includes("컴소과") || text.includes("컴퓨터") || text.includes("위치")) {
-                    title = "7호관 3층 7305호";
-                    description = "컴퓨터소프트웨어공학과 학과 사무실입니다.";
-                    extraInfo = "엘리베이터에서 내려서 오른쪽 복도 끝으로 가세요.";
-                } else if (text.includes("도서관")) {
-                    title = "5호관 2층";
-                    description = "중앙 도서관입니다.";
-                    extraInfo = "입장 시 모바일 학생증(QR)이 필요합니다. 운영시간: 09:00 ~ 22:00";
-                } else if (text.includes("카페") || text.includes("커피")) {
-                    title = "BluePot (블루포트)";
-                    description = "4호관 1층 학생회관 옆";
-                    extraInfo = "현재 혼잡도는 '보통' 입니다. 창가 자리가 비어있어요. ☕";
+                const data = await response.json();
+
+                if (data.success) {
+                    removeLoadingCard(loadingId);
+                    addBotCard(data.title, data.description, data.extraInfo);
+                } else {
+                    removeLoadingCard(loadingId);
+                    addBotCard(
+                        data.title || "오류 발생",
+                        data.description || "서버와 연결할 수 없습니다.",
+                        data.extraInfo || "잠시 후 다시 시도해주세요."
+                    );
                 }
-
-                removeLoadingCard(loadingId);
-                addBotCard(title, description, extraInfo);
 
             } catch (error) {
                 console.error("Error:", error);
                 removeLoadingCard(loadingId);
-                addBotCard("오류 발생", "서버와 연결할 수 없습니다.", "잠시 후 다시 시도해주세요.");
+                addBotCard("오류 발생", "서버와 연결할 수 없습니다.", "네트워크 연결을 확인해주세요.");
             }
         }
 

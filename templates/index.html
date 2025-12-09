@@ -1,14 +1,610 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Web Page</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <h1>Welcome to my AI Web Page</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CampusGuide Bixby Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Noto Sans KR) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bixby-blue-start: #2876f9;
+            --bixby-blue-end: #6d42ef;
+            --bg-color: #050505;
+            --card-bg: #1a1a1a;
+        }
 
-    <script src="/static/js/script.js"></script>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: var(--bg-color);
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Bixby Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Bixby Card Style (Capsule View) */
+        .bixby-card {
+            background-color: var(--card-bg);
+            border-radius: 1.5rem; /* 24px */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: cardPopup 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+
+        @keyframes cardPopup {
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Bixby Bottom Bar Animation */
+        .bixby-bar-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bixby-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2876f9, #a855f7, #2876f9);
+            background-size: 200% 100%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .listening .bixby-wave {
+            opacity: 1;
+            height: 6px;
+            animation: flowWave 2s linear infinite;
+        }
+
+        @keyframes flowWave {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* Bixby Logo Animation */
+        .bixby-logo-wrap {
+            position: relative;
+        }
+        .bixby-logo-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 35% 65% 55% 45% / 55% 45% 65% 35%;
+            background: linear-gradient(135deg, rgba(40, 118, 249, 0.5), rgba(109, 66, 239, 0.5));
+            filter: blur(15px);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+        .listening .bixby-logo-pulse {
+            opacity: 1;
+            animation: morphPulse 3s infinite linear;
+        }
+
+        @keyframes morphPulse {
+            0% { border-radius: 35% 65% 55% 45% / 55% 45% 65% 35%; transform: translate(-50%, -50%) rotate(0deg) scale(1.2); }
+            50% { border-radius: 55% 45% 35% 65% / 35% 65% 55% 45%; transform: translate(-50%, -50%) rotate(180deg) scale(1.4); }
+            100% { border-radius: 35% 65% 55% 45% / 55% 45% 65% 35%; transform: translate(-50%, -50%) rotate(360deg) scale(1.2); }
+        }
+
+        /* Loading Dots */
+        .bixby-loader span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .bixby-loader span:nth-child(1) { animation-delay: -0.32s; }
+        .bixby-loader span:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* 반응형 및 키오스크 세로형 대응 */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.25rem;
+            }
+            
+            header .text-lg {
+                font-size: 1rem;
+            }
+            
+            #welcome-message h1 {
+                font-size: 1.5rem;
+            }
+            
+            #welcome-message h2 {
+                font-size: 1.75rem;
+            }
+            
+            .bixby-card {
+                padding: 1.25rem;
+            }
+            
+            .bixby-card h3 {
+                font-size: 1.5rem;
+            }
+            
+            .bixby-card p {
+                font-size: 1rem;
+            }
+        }
+
+        /* 키오스크 세로형 (Portrait) 대응 */
+        @media (orientation: portrait) and (max-height: 1080px) {
+            header {
+                padding: 0.75rem 1rem;
+                min-height: 60px;
+            }
+            
+            #chat-container {
+                padding: 1rem;
+                padding-bottom: 280px; /* 하단 영역 높이에 맞춤 */
+            }
+            
+            #welcome-message {
+                margin-bottom: 1.5rem;
+            }
+            
+            #welcome-message h1 {
+                font-size: 1.25rem;
+            }
+            
+            #welcome-message h2 {
+                font-size: 1.5rem;
+            }
+            
+            .bixby-card {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .bixby-card h3 {
+                font-size: 1.25rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .bixby-card p {
+                font-size: 0.9rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .bixby-card button {
+                padding: 0.75rem;
+                font-size: 0.875rem;
+            }
+            
+            /* 하단 고정 영역 조정 */
+            .fixed.bottom-0 {
+                padding-top: 0.75rem;
+                padding-bottom: 1rem;
+            }
+            
+            /* 제안 칩 버튼 크기 조정 */
+            .fixed.bottom-0 button[onclick*="sendQuickMessage"] {
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+            
+            /* 마이크 버튼 크기 조정 */
+            #mic-btn {
+                width: 3rem;
+                height: 3rem;
+            }
+            
+            /* 입력 필드 크기 조정 */
+            #user-input {
+                padding: 0.75rem 3rem 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            /* 제안 칩 영역 스크롤 개선 */
+            .fixed.bottom-0 .overflow-x-auto {
+                padding-bottom: 0.5rem;
+            }
+        }
+
+        /* 매우 작은 세로형 화면 (예: 작은 키오스크) */
+        @media (orientation: portrait) and (max-height: 800px) {
+            header {
+                padding: 0.5rem 0.75rem;
+                min-height: 50px;
+            }
+            
+            header .w-8 {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            
+            #chat-container {
+                padding: 0.75rem;
+                padding-bottom: 240px;
+            }
+            
+            #welcome-message {
+                margin-bottom: 1rem;
+            }
+            
+            #welcome-message h1 {
+                font-size: 1.125rem;
+            }
+            
+            #welcome-message h2 {
+                font-size: 1.25rem;
+            }
+            
+            .bixby-card {
+                padding: 0.875rem;
+            }
+            
+            .bixby-card h3 {
+                font-size: 1.125rem;
+            }
+            
+            .bixby-card p {
+                font-size: 0.875rem;
+            }
+            
+            .fixed.bottom-0 {
+                padding-top: 0.5rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            .fixed.bottom-0 .gap-6 {
+                gap: 0.75rem;
+            }
+            
+            #mic-btn {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            #user-input {
+                padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* 가로형 화면 최적화 */
+        @media (orientation: landscape) and (max-height: 600px) {
+            header {
+                padding: 0.5rem 1rem;
+                min-height: 50px;
+            }
+            
+            #chat-container {
+                padding: 0.75rem;
+                padding-bottom: 200px;
+            }
+            
+            .fixed.bottom-0 {
+                padding-top: 0.5rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            .fixed.bottom-0 .gap-6 {
+                gap: 0.75rem;
+            }
+        }
+
+        /* 콘텐츠가 하단 영역에 가려지지 않도록 보장 */
+        #chat-container {
+            min-height: 0;
+            flex: 1 1 auto;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- 1. Header (Minimal Bixby Style) -->
+    <header class="p-6 flex items-center justify-between shrink-0 z-20">
+        <div class="flex items-center gap-2">
+            <!-- Simplified Bixby-like B icon -->
+            <div class="w-8 h-8 flex items-center justify-center">
+               <svg viewBox="0 0 24 24" fill="none" class="w-full h-full text-blue-400">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2V9h2v8z" fill="currentColor"/>
+               </svg>
+            </div>
+            <span class="text-lg font-bold tracking-wide text-gray-200">CampusGuide</span>
+        </div>
+        <div class="text-xs text-gray-500 font-medium px-3 py-1 bg-gray-900 rounded-full border border-gray-800">
+            Beta
+        </div>
+    </header>
+
+    <!-- 2. Main Content (Bixby Views / Cards) -->
+    <main id="chat-container" class="flex-1 overflow-y-auto p-6 flex flex-col justify-end space-y-6 no-scrollbar relative z-10" style="padding-bottom: 280px;">
+        
+        <!-- Welcome View -->
+        <div id="welcome-message" class="text-center space-y-2 mb-10 transition-opacity duration-500">
+            <h1 class="text-3xl font-light text-gray-400">안녕하세요,</h1>
+            <h2 class="text-4xl font-bold text-white leading-tight">
+                <span class="text-gradient">무엇을 도와드릴까요?</span>
+            </h2>
+        </div>
+
+        <!-- Dynamic Content will be injected here -->
+        
+    </main>
+
+    <!-- 3. Bottom Interaction Area (Bixby Bar) -->
+    <div id="bottom-bar" class="fixed bottom-0 left-0 w-full z-30 bg-[#050505] pt-4 pb-8 border-t border-gray-800/30 rounded-t-[2rem]">
+        
+        <!-- Bixby Wave Animation Line -->
+        <div id="wave-bar" class="bixby-wave top-0 absolute"></div>
+
+        <div class="flex flex-col items-center gap-6 px-6">
+            
+            <!-- Suggestion Chips (Pills) -->
+            <div class="w-full flex justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar pb-2 px-2">
+                <button onclick="sendQuickMessage('컴소과 사무실 위치')" 
+                    class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
+                    "컴소과 사무실 위치 알려줘"
+                </button>
+                <button onclick="sendQuickMessage('조용한 카페 추천')" 
+                    class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
+                    "조용한 카페 추천해줘"
+                </button>
+                <button onclick="sendQuickMessage('도서관 가는 길')" 
+                    class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
+                    "도서관 어떻게 가?"
+                </button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="w-full max-w-2xl relative flex items-center gap-4">
+                
+                <!-- Bixby Logo / Mic Button -->
+                <button id="mic-btn" type="button" onclick="toggleMic()" 
+                    class="bixby-logo-wrap w-14 h-14 rounded-full bg-gradient-to-br from-[#2876f9] to-[#6d42ef] flex items-center justify-center text-white shadow-lg shrink-0 transition-transform active:scale-90 z-20">
+                    <div class="bixby-logo-pulse"></div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Bixby_logo_black.svg/1200px-Bixby_logo_black.svg.png" 
+                         alt="Bixby" class="w-6 h-6 invert opacity-90">
+                </button>
+
+                <!-- Text Input -->
+                <form onsubmit="handleFormSubmit(event)" class="flex-1">
+                    <div class="relative w-full">
+                        <input type="text" id="user-input" 
+                            class="w-full bg-[#1a1a1a] text-white placeholder-gray-500 px-6 py-4 rounded-full focus:outline-none focus:ring-1 focus:ring-blue-500 text-lg transition-colors border border-transparent focus:border-blue-500/50"
+                            placeholder="명령어를 입력하세요" autocomplete="off">
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+            
+            <p class="text-[10px] text-gray-600 font-medium tracking-wider uppercase">Powered by CampusGuide AI</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const micBtn = document.getElementById('mic-btn');
+        const waveBar = document.getElementById('wave-bar');
+        const welcomeMsg = document.getElementById('welcome-message');
+        const bottomBar = document.getElementById('bottom-bar');
+        let isMicActive = false;
+
+        // 하단 영역 높이에 맞춰 콘텐츠 영역 padding 조정
+        function adjustContentPadding() {
+            if (bottomBar && chatContainer) {
+                const bottomBarHeight = bottomBar.offsetHeight;
+                chatContainer.style.paddingBottom = (bottomBarHeight + 20) + 'px';
+            }
+        }
+
+        // 초기 로드 및 리사이즈 시 실행
+        window.addEventListener('load', adjustContentPadding);
+        window.addEventListener('resize', adjustContentPadding);
+        
+        // 초기 실행
+        adjustContentPadding();
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (message) {
+                sendMessage(message);
+                userInput.value = '';
+            }
+        }
+
+        function sendQuickMessage(text) {
+            sendMessage(text);
+        }
+
+        async function sendMessage(text) {
+            // 1. Hide Welcome Message on first interaction
+            if(welcomeMsg) welcomeMsg.style.display = 'none';
+
+            // 2. Add User Message (Right side, text only, subtle)
+            addUserMessage(text);
+
+            // 3. Add Loading Card
+            const loadingId = addLoadingCard();
+            
+            // --- [Backend Integration Point] ---
+            // const API_URL = "http://localhost:8000/chat"; 
+            
+            try {
+                // Mock Delay
+                await new Promise(r => setTimeout(r, 1500)); 
+                
+                let title = "정보를 찾을 수 없어요";
+                let description = "죄송합니다. 아직 해당 질문에 대한 정보가 없습니다.";
+                let extraInfo = "";
+
+                if (text.includes("컴소과") || text.includes("컴퓨터") || text.includes("위치")) {
+                    title = "7호관 3층 7305호";
+                    description = "컴퓨터소프트웨어공학과 학과 사무실입니다.";
+                    extraInfo = "엘리베이터에서 내려서 오른쪽 복도 끝으로 가세요.";
+                } else if (text.includes("도서관")) {
+                    title = "5호관 2층";
+                    description = "중앙 도서관입니다.";
+                    extraInfo = "입장 시 모바일 학생증(QR)이 필요합니다. 운영시간: 09:00 ~ 22:00";
+                } else if (text.includes("카페") || text.includes("커피")) {
+                    title = "BluePot (블루포트)";
+                    description = "4호관 1층 학생회관 옆";
+                    extraInfo = "현재 혼잡도는 '보통' 입니다. 창가 자리가 비어있어요. ☕";
+                }
+
+                removeLoadingCard(loadingId);
+                addBotCard(title, description, extraInfo);
+
+            } catch (error) {
+                console.error("Error:", error);
+                removeLoadingCard(loadingId);
+                addBotCard("오류 발생", "서버와 연결할 수 없습니다.", "잠시 후 다시 시도해주세요.");
+            }
+        }
+
+        // Add User Text (Minimalist, aligned right)
+        function addUserMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'flex justify-end mb-4 opacity-0 transition-opacity duration-300';
+            setTimeout(() => div.classList.remove('opacity-0'), 10);
+            
+            div.innerHTML = `
+                <div class="text-xl font-medium text-gray-300 px-4 break-words max-w-[85%] sm:max-w-[70%]">
+                    "${text}"
+                </div>
+            `;
+            chatContainer.appendChild(div);
+            scrollToBottom();
+        }
+
+        // Add Bot Card (Bixby View Style)
+        function addBotCard(title, description, extraInfo) {
+            const div = document.createElement('div');
+            div.className = 'flex justify-center w-full mb-4 sm:mb-8';
+            
+            div.innerHTML = `
+                <div class="bixby-card w-full max-w-lg p-4 sm:p-6 relative overflow-hidden">
+                    <!-- Decorate Gradient Background -->
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                    
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 leading-snug break-words">${title}</h3>
+                    <p class="text-gray-300 text-base sm:text-lg mb-3 sm:mb-4 font-light break-words">${description}</p>
+                    
+                    ${extraInfo ? `
+                    <div class="bg-gray-800/50 rounded-xl p-3 sm:p-4 border border-gray-700/50 mt-2">
+                        <div class="flex items-start gap-2 sm:gap-3">
+                            <i class="fa-solid fa-circle-info text-blue-400 mt-0.5 sm:mt-1 flex-shrink-0"></i>
+                            <p class="text-xs sm:text-sm text-gray-400 leading-relaxed break-words">${extraInfo}</p>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2">
+                        <button class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition">
+                            지도 보기
+                        </button>
+                        <button class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition shadow-lg shadow-blue-900/20">
+                            길안내 시작
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            chatContainer.appendChild(div);
+            scrollToBottom();
+        }
+
+        function addLoadingCard() {
+            const id = 'loading-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex justify-center w-full mb-8';
+            div.innerHTML = `
+                <div class="bixby-card w-full max-w-lg p-8 flex flex-col items-center justify-center gap-4 min-h-[150px]">
+                     <div class="bixby-loader">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm font-light animate-pulse">확인하고 있어요...</p>
+                </div>
+            `;
+            chatContainer.appendChild(div);
+            scrollToBottom();
+            return id;
+        }
+
+        function removeLoadingCard(id) {
+            const element = document.getElementById(id);
+            if (element) element.remove();
+        }
+
+        function scrollToBottom() {
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function toggleMic() {
+            isMicActive = !isMicActive;
+            const btnWrap = micBtn;
+            const container = micBtn.parentElement.parentElement.parentElement; // .fixed bottom container
+
+            if (isMicActive) {
+                // Listening Mode
+                btnWrap.classList.add('listening'); // trigger logo pulse
+                container.classList.add('listening'); // trigger wave bar
+                
+                userInput.placeholder = "말씀하세요...";
+            } else {
+                // Idle Mode
+                btnWrap.classList.remove('listening');
+                container.classList.remove('listening');
+                
+                userInput.placeholder = "명령어를 입력하세요";
+            }
+        }
+    </script>
 </body>
 </html>

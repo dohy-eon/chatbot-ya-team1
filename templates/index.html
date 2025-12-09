@@ -39,8 +39,32 @@
             flex-direction: column;
         }
         
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Scrollbar for Chat Container */
+        #chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #chat-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        #chat-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        #chat-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Firefox scrollbar */
+        #chat-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+        }
 
         /* Bixby Gradient Text */
         .text-gradient {
@@ -54,14 +78,101 @@
         .bixby-card {
             background-color: var(--card-bg);
             border-radius: 1.5rem; /* 24px */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: cardPopup 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+            animation: cardPopup 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
-            transform: scale(0.9) translateY(20px);
+            transform: scale(0.96) translateY(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         @keyframes cardPopup {
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+
+        /* User Message Bubble */
+        .user-message-bubble {
+            background: linear-gradient(135deg, rgba(40, 118, 249, 0.15) 0%, rgba(109, 66, 239, 0.15) 100%);
+            border: 1px solid rgba(40, 118, 249, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+            padding: 0.75rem 1.25rem;
+            max-width: 85%;
+            word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            animation: messageSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateX(10px);
+        }
+
+        @keyframes messageSlideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Image Container */
+        .building-image-container {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .building-image-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .building-image-container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .building-image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Image Loading State */
+        .image-loading {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Info Card */
+        .info-card {
+            background: linear-gradient(135deg, rgba(26,26,26,0.8) 0%, rgba(30,30,30,0.8) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Title Gradient */
+        .card-title {
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.9) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         /* Bixby Bottom Bar Animation */
@@ -123,21 +234,42 @@
         }
 
         /* Loading Dots */
+        .bixby-loader {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+        }
         .bixby-loader span {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: linear-gradient(135deg, #60a5fa, #a78bfa);
-            margin: 0 2px;
             animation: bounce 1.4s infinite ease-in-out both;
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
         }
-        .bixby-loader span:nth-child(1) { animation-delay: -0.32s; }
-        .bixby-loader span:nth-child(2) { animation-delay: -0.16s; }
+        .bixby-loader span:nth-child(1) { 
+            animation-delay: -0.32s; 
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        }
+        .bixby-loader span:nth-child(2) { 
+            animation-delay: -0.16s; 
+            background: linear-gradient(135deg, #818cf8, #a78bfa);
+        }
+        .bixby-loader span:nth-child(3) {
+            background: linear-gradient(135deg, #a78bfa, #c084fc);
+        }
         
         @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1.0); }
+            0%, 80%, 100% { 
+                transform: scale(0.6) translateY(0);
+                opacity: 0.6;
+            }
+            40% { 
+                transform: scale(1.2) translateY(-8px);
+                opacity: 1;
+            }
         }
 
         /* 반응형 및 키오스크 세로형 대응 */
@@ -223,8 +355,22 @@
             
             /* 제안 칩 버튼 크기 조정 */
             .fixed.bottom-0 button[onclick*="sendQuickMessage"] {
-                padding: 0.5rem 1rem;
-                font-size: 0.75rem;
+                padding: 0.5rem 0.875rem;
+                font-size: 0.7rem;
+                line-height: 1.3;
+                min-width: fit-content;
+            }
+            
+            /* 제안 칩 컨테이너 조정 */
+            #suggestion-chips {
+                padding-bottom: 0.5rem;
+                justify-content: flex-start;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            
+            #suggestion-chips::-webkit-scrollbar {
+                display: none;
             }
             
             /* 마이크 버튼 크기 조정 */
@@ -237,11 +383,6 @@
             #user-input {
                 padding: 0.75rem 3rem 0.75rem 1rem;
                 font-size: 0.9rem;
-            }
-            
-            /* 제안 칩 영역 스크롤 개선 */
-            .fixed.bottom-0 .overflow-x-auto {
-                padding-bottom: 0.5rem;
             }
         }
 
@@ -295,6 +436,13 @@
                 gap: 0.75rem;
             }
             
+            /* 제안 칩 버튼 크기 조정 (작은 화면) */
+            .fixed.bottom-0 button[onclick*="sendQuickMessage"] {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.65rem;
+                line-height: 1.3;
+            }
+            
             #mic-btn {
                 width: 2.5rem;
                 height: 2.5rem;
@@ -332,6 +480,16 @@
         #chat-container {
             min-height: 0;
             flex: 1 1 auto;
+            /* 스크롤 활성화 */
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            /* 스크롤 동작 개선 */
+            scroll-behavior: smooth;
+        }
+        
+        /* justify-end 제거 후 스크롤이 제대로 작동하도록 */
+        #chat-container.flex-col {
+            justify-content: flex-start;
         }
     </style>
 </head>
@@ -354,14 +512,15 @@
     </header>
 
     <!-- 2. Main Content (Bixby Views / Cards) -->
-    <main id="chat-container" class="flex-1 overflow-y-auto p-6 flex flex-col justify-end space-y-6 no-scrollbar relative z-10" style="padding-bottom: 280px;">
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col space-y-4 sm:space-y-6 relative z-10" style="padding-bottom: 280px;">
         
         <!-- Welcome View -->
-        <div id="welcome-message" class="text-center space-y-2 mb-10 transition-opacity duration-500">
-            <h1 class="text-3xl font-light text-gray-400">안녕하세요,</h1>
-            <h2 class="text-4xl font-bold text-white leading-tight">
+        <div id="welcome-message" class="text-center space-y-3 mb-12 sm:mb-16 transition-opacity duration-500">
+            <h1 class="text-2xl sm:text-3xl font-light text-gray-400 tracking-wide">안녕하세요,</h1>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white leading-tight">
                 <span class="text-gradient">무엇을 도와드릴까요?</span>
             </h2>
+            <p class="text-sm sm:text-base text-gray-500 mt-4 font-light">캠퍼스 내 건물, 시설 위치를 물어보세요</p>
         </div>
 
         <!-- Dynamic Content will be injected here -->
@@ -377,7 +536,7 @@
         <div class="flex flex-col items-center gap-6 px-6">
             
             <!-- Suggestion Chips (Pills) -->
-            <div class="w-full flex justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar pb-2 px-2">
+            <div id="suggestion-chips" class="w-full flex justify-center sm:justify-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar pb-2 px-2">
                 <button onclick="sendQuickMessage('컴퓨터공학부 사무실 위치')" 
                     class="bg-[#1a1a1a] border border-gray-700 hover:bg-gray-800 hover:border-gray-500 text-gray-200 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition active:scale-95 whitespace-nowrap flex-shrink-0">
                     "컴퓨터공학부 사무실 어디야?"
@@ -440,11 +599,30 @@
         }
 
         // 초기 로드 및 리사이즈 시 실행
-        window.addEventListener('load', adjustContentPadding);
+        window.addEventListener('load', () => {
+            adjustContentPadding();
+            // 초기 로드 시 스크롤을 하단으로 이동
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100);
+        });
         window.addEventListener('resize', adjustContentPadding);
         
         // 초기 실행
         adjustContentPadding();
+        
+        // DOMContentLoaded 시에도 스크롤 하단으로 이동
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100);
+            });
+        } else {
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100);
+        }
 
         function handleFormSubmit(e) {
             e.preventDefault();
@@ -485,68 +663,90 @@
 
                 if (data.success) {
                     removeLoadingCard(loadingId);
-                    addBotCard(data.title, data.description, data.extraInfo);
+                    addBotCard(data.title, data.description, data.extraInfo, data.imageUrl);
                 } else {
                     removeLoadingCard(loadingId);
                     addBotCard(
                         data.title || "오류 발생",
                         data.description || "서버와 연결할 수 없습니다.",
-                        data.extraInfo || "잠시 후 다시 시도해주세요."
+                        data.extraInfo || "잠시 후 다시 시도해주세요.",
+                        null
                     );
                 }
 
             } catch (error) {
                 console.error("Error:", error);
                 removeLoadingCard(loadingId);
-                addBotCard("오류 발생", "서버와 연결할 수 없습니다.", "네트워크 연결을 확인해주세요.");
+                addBotCard("오류 발생", "서버와 연결할 수 없습니다.", "네트워크 연결을 확인해주세요.", null);
             }
         }
 
         // Add User Text (Minimalist, aligned right)
         function addUserMessage(text) {
             const div = document.createElement('div');
-            div.className = 'flex justify-end mb-4 opacity-0 transition-opacity duration-300';
-            setTimeout(() => div.classList.remove('opacity-0'), 10);
+            div.className = 'flex justify-end mb-5 sm:mb-6';
             
             div.innerHTML = `
-                <div class="text-xl font-medium text-gray-300 px-4 break-words max-w-[85%] sm:max-w-[70%]">
-                    "${text}"
+                <div class="user-message-bubble">
+                    <span class="text-base sm:text-lg font-medium text-gray-100 leading-relaxed">${escapeHtml(text)}</span>
                 </div>
             `;
             chatContainer.appendChild(div);
             scrollToBottom();
         }
 
-        // Add Bot Card (Bixby View Style)
-        function addBotCard(title, description, extraInfo) {
+        // HTML 이스케이프 함수
+        function escapeHtml(text) {
             const div = document.createElement('div');
-            div.className = 'flex justify-center w-full mb-4 sm:mb-8';
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Add Bot Card (Bixby View Style)
+        function addBotCard(title, description, extraInfo, imageUrl) {
+            const div = document.createElement('div');
+            div.className = 'flex justify-start w-full mb-5 sm:mb-8';
+            
+            // 이미지 로딩 상태 관리
+            const imageId = imageUrl ? 'img-' + Date.now() : null;
             
             div.innerHTML = `
-                <div class="bixby-card w-full max-w-lg p-4 sm:p-6 relative overflow-hidden">
+                <div class="bixby-card w-full max-w-lg p-5 sm:p-7 relative overflow-hidden">
                     <!-- Decorate Gradient Background -->
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500"></div>
                     
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 leading-snug break-words">${title}</h3>
-                    <p class="text-gray-300 text-base sm:text-lg mb-3 sm:mb-4 font-light break-words">${description}</p>
+                    <!-- Title -->
+                    <h3 class="card-title text-xl sm:text-2xl mb-3 leading-tight break-words">${escapeHtml(title)}</h3>
                     
+                    <!-- Description -->
+                    <p class="text-gray-300 text-[15px] sm:text-base mb-4 leading-relaxed break-words font-light">${escapeHtml(description)}</p>
+                    
+                    <!-- Building Image -->
+                    ${imageUrl ? `
+                    <div class="building-image-container mt-4 mb-4 ${imageId ? 'image-loading' : ''}" id="${imageId ? 'container-' + imageId : ''}">
+                        <img 
+                            src="${imageUrl}" 
+                            alt="${escapeHtml(title)}" 
+                            class="w-full h-auto object-cover"
+                            loading="lazy"
+                            onload="document.getElementById('container-${imageId}')?.classList.remove('image-loading')"
+                            onerror="this.parentElement.style.display='none'">
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Extra Info -->
                     ${extraInfo ? `
-                    <div class="bg-gray-800/50 rounded-xl p-3 sm:p-4 border border-gray-700/50 mt-2">
-                        <div class="flex items-start gap-2 sm:gap-3">
-                            <i class="fa-solid fa-circle-info text-blue-400 mt-0.5 sm:mt-1 flex-shrink-0"></i>
-                            <p class="text-xs sm:text-sm text-gray-400 leading-relaxed break-words">${extraInfo}</p>
+                    <div class="info-card">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 mt-0.5">
+                                <i class="fa-solid fa-circle-info text-blue-400 text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed break-words whitespace-pre-line">${escapeHtml(extraInfo)}</p>
+                            </div>
                         </div>
                     </div>
                     ` : ''}
-
-                    <div class="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2">
-                        <button class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition">
-                            지도 보기
-                        </button>
-                        <button class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition shadow-lg shadow-blue-900/20">
-                            길안내 시작
-                        </button>
-                    </div>
                 </div>
             `;
 
@@ -558,13 +758,13 @@
             const id = 'loading-' + Date.now();
             const div = document.createElement('div');
             div.id = id;
-            div.className = 'flex justify-center w-full mb-8';
+            div.className = 'flex justify-start w-full mb-5 sm:mb-8';
             div.innerHTML = `
-                <div class="bixby-card w-full max-w-lg p-8 flex flex-col items-center justify-center gap-4 min-h-[150px]">
-                     <div class="bixby-loader">
+                <div class="bixby-card w-full max-w-lg p-6 sm:p-8 flex flex-col items-center justify-center gap-5 min-h-[140px]">
+                    <div class="bixby-loader">
                         <span></span><span></span><span></span>
                     </div>
-                    <p class="text-gray-400 text-sm font-light animate-pulse">확인하고 있어요...</p>
+                    <p class="text-gray-400 text-sm font-light">확인하고 있어요<span class="animate-pulse">...</span></p>
                 </div>
             `;
             chatContainer.appendChild(div);
@@ -578,10 +778,20 @@
         }
 
         function scrollToBottom() {
-            chatContainer.scrollTo({
-                top: chatContainer.scrollHeight,
-                behavior: 'smooth'
-            });
+            if (chatContainer) {
+                // 즉시 스크롤 (스크롤이 잠기지 않도록)
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+        
+        // 부드러운 스크롤 함수 (선택적 사용)
+        function scrollToBottomSmooth() {
+            if (chatContainer) {
+                chatContainer.scrollTo({
+                    top: chatContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
         }
 
         function toggleMic() {

@@ -1,0 +1,125 @@
+{
+  "campus_facilities": [
+    {
+      "building_id": "bldg_1",
+      "building_name": "1호관 (대학본부)",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_1.png",
+      "floors": [
+        { "floor": "1F", "facilities": ["강의실", "입시지원팀", "웰컴라운지", "웰컴갤러리"] },
+        { "floor": "2F", "facilities": ["강의실", "유학생지원실", "HiVE 센터", "국제교류센터"] },
+        { "floor": "3F", "facilities": ["강의실", "예비군연대", "교양과사무실", "전산실습실"] },
+        { "floor": "4F", "facilities": ["학생서비스센터(휴/복학,수업,장학)", "취업지원센터", "현장실습지원센터", "공학기술교육혁신센터", "KB국민 ATM", "증명서발급기"] },
+        { "floor": "5F", "facilities": ["사무처", "소강당"] },
+        { "floor": "6F", "facilities": ["산학협력단", "기획혁신처", "기획혁신처장실"] },
+        { "floor": "7F", "facilities": ["교무입학처", "교무입학처장실", "감사장", "대외평가실"] },
+        { "floor": "8F", "facilities": ["총장실", "학생처장실", "사무처장실", "종합회의실", "부속실"] },
+        { "floor": "9F", "facilities": ["법인사무국"] }
+      ]
+    },
+    {
+      "building_id": "bldg_lib",
+      "building_name": "도서관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_2.png",
+      "floors": [
+        { "floor": "1F", "facilities": ["D-Study", "D-Culture", "그룹스터디룸", "디자인홍보센터", "홍보대사단실", "동양학보기자단실"] },
+        { "floor": "2F", "facilities": ["어문학자료실", "그룹스터디룸"] },
+        { "floor": "3F", "facilities": ["과학기술자료실", "그룹스터디룸"] },
+        { "floor": "4F", "facilities": ["도서관 사무실", "톡톡마루", "너나마루", "온빛마루", "대출실", "그룹스터디룸"] },
+        { "floor": "5F", "facilities": ["중앙전산소", "별별마루(오디토리움, VR룸)", "열린마루", "그룹스터디룸"] },
+        { "floor": "6F", "facilities": ["인문사회자료실"] }
+      ]
+    },
+    {
+      "building_id": "bldg_2",
+      "building_name": "2호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_3.png",
+      "floors": [
+        { "floor": "B2", "facilities": ["강의실"] },
+        { "floor": "B1", "facilities": ["강의실"] },
+        { "floor": "1F", "facilities": ["전산실습실", "칵테일 실습실"] },
+        { "floor": "2F", "facilities": ["전산실습실", "강의실"] },
+        { "floor": "3F", "facilities": ["경영학부사무실", "스마트강의실"] },
+        { "floor": "4F", "facilities": ["교수연구실", "교수학습지원센터", "스튜디오실"] },
+        { "floor": "5F", "facilities": ["교수연구실"] },
+        { "floor": "6F", "facilities": ["교수연구실"] },
+        { "floor": "7F", "facilities": ["교수연구실"] }
+      ]
+    },
+    {
+      "building_id": "bldg_3",
+      "building_name": "3호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_4.png",
+      "floors": [
+        { "floor": "1F", "facilities": ["총학생회", "대의원회", "보건실", "학생상담센터", "장애학생지원실", "여학생휴게실", "부트캠프클린룸", "전산실습실", "P-Tech 사무실"] },
+        { "floor": "2F", "facilities": ["컴퓨터공학부사무실", "전산실습실"] },
+        { "floor": "3F", "facilities": ["전산실습실", "PD Lab"] },
+        { "floor": "4F", "facilities": ["전기전자통신공학부사무실", "실험실습실", "전산실습실"] },
+        { "floor": "5F", "facilities": ["실험실습실", "강의실", "전산실습실"] }
+      ]
+    },
+    {
+      "building_id": "bldg_4",
+      "building_name": "4호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_5.png",
+      "floors": [
+        { "floor": "B1F", "facilities": ["실습실험실"] },
+        { "floor": "1F", "facilities": ["실습실험실"] },
+        { "floor": "2F", "facilities": ["기계공학부사무실", "로봇자동화공학부사무실", "부트캠프사업단", "실습실험실"] },
+        { "floor": "3F", "facilities": ["생명화학공학과사무실", "바이오융합공학과사무실", "실습실험실", "전산실습실"] },
+        { "floor": "4F", "facilities": ["전산실험실"] },
+        { "floor": "5F", "facilities": ["실습실험실", "전산실습실"] },
+        { "floor": "6F", "facilities": ["C.I Lab(취미동아리)"] }
+      ]
+    },
+    {
+      "building_id": "bldg_5",
+      "building_name": "5호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_6.png",
+      "floors": [
+        { "floor": "B1F", "facilities": ["스마트융합제작 실습실"] },
+        { "floor": "1F", "facilities": ["튜터링카페", "실습실", "PD Lab Star"] },
+        { "floor": "2F", "facilities": ["실업실습실"] },
+        { "floor": "3F", "facilities": ["DM Lab"] }
+      ]
+    },
+    {
+      "building_id": "bldg_6",
+      "building_name": "6호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_7.png",
+      "floors": [
+        { "floor": "B3", "facilities": ["휘트니스센터", "다목적실습실"] },
+        { "floor": "B2", "facilities": ["동창회사무실", "실험실습실", "공동장비운영센터"] },
+        { "floor": "B1", "facilities": ["DM Gallery", "강의실"] },
+        { "floor": "1F", "facilities": ["갤러리", "강의실", "실험실습실", "전산실습실"] },
+        { "floor": "2F", "facilities": ["강의실", "체력측정실", "원격강의공용실습실"] },
+        { "floor": "3F", "facilities": ["강의실", "실험실습실", "전산실습실"] },
+        { "floor": "4F", "facilities": ["강의실", "실험실습실", "촬영스튜디오", "전산실습실"] },
+        { "floor": "5F", "facilities": ["교수연구실"] }
+      ]
+    },
+    {
+      "building_id": "bldg_7",
+      "building_name": "7호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_8.png",
+      "floors": [
+        { "floor": "B1F", "facilities": ["실습실험실"] },
+        { "floor": "1F", "facilities": ["전신실습실", "실습실험실", "강의실"] },
+        { "floor": "2F", "facilities": ["동아리실", "강의실", "실습실험실"] },
+        { "floor": "3F", "facilities": ["생활환경공학부사무실(건축,실내,시각,AR-VR", "교수연구실"] },
+        { "floor": "4F", "facilities": ["강의실", "설계실", "동아리실", "실험실습실"] },
+        { "floor": "5F", "facilities": ["실험실습실", "통합설계실", "전산실습실"] }
+      ]
+    },
+    {
+      "building_id": "bldg_8",
+      "building_name": "8호관",
+      "image_url": "https://www.dongyang.ac.kr/sites/dmu/images/sub/campus_9.png",
+      "floors": [
+        { "floor": "B1F", "facilities": ["주차장"] },
+        { "floor": "1F", "facilities": ["대강당", "GHRC(여행사)", "서브웨이", "KB국민은행", "CU편의점", "유료사물함"] },
+        { "floor": "2F", "facilities": ["서점(글로세움)", "문구점(모닝글로리)", "제주몰빵(카페)"] },
+        { "floor": "3F", "facilities": ["학생식당(동양미래푸드)", "강의실", "XR스튜디오", "전산실습실"] }
+      ]
+    }
+  ]
+}
